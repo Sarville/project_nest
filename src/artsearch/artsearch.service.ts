@@ -34,6 +34,7 @@ export class ArtsearchService {
 
       return response.data;
     } catch (err: any) {
+      this.quotasService.update('artsearch', 0);
       const data = err?.response?.data;
       const message = (typeof data === 'string' ? data : data?.message ?? data?.error) ?? 'Upstream error';
       throw new HttpException(message, HttpStatus.I_AM_A_TEAPOT);

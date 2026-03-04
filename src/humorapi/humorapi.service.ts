@@ -32,6 +32,7 @@ export class HumorapiService {
 
       return response.data;
     } catch (err: any) {
+      this.quotasService.update('humorapi', 0);
       const data = err?.response?.data;
       const message = (typeof data === 'string' ? data : data?.message ?? data?.error) ?? 'Upstream error';
       throw new HttpException(message, HttpStatus.I_AM_A_TEAPOT);
