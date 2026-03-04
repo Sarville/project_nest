@@ -13,13 +13,15 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
+COPY prisma/ ./prisma/
+COPY prisma.config.ts ./
+RUN DATABASE_URL="postgresql://x:x@x:5432/x" npx prisma generate
+
 COPY . .
 RUN npm run build
 
 # Copy built frontend into the image
 COPY --from=client-build /app/client/dist ./client/dist
-
-COPY prisma/ ./prisma/
 
 EXPOSE 3001
 
