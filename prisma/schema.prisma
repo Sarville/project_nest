@@ -43,3 +43,11 @@ model RequestLog {
 
   @@map("request_logs")
 }
+
+model ApiQuota {
+  api       String   @id @db.VarChar(20)
+  quotaLeft Int
+  updatedAt DateTime @default(now())
+
+  @@map("api_quotas")
+}
