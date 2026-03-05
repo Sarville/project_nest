@@ -1,4 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useAuth } from "./context/AuthContext";
+import AuthPage from "./components/AuthPage";
+import NavBar from "./components/NavBar";
+import AdminPanel from "./components/AdminPanel";
 import ArtSearch from "./components/ArtSearch";
 import MemeSearch from "./components/MemeSearch";
 import WishList from "./components/WishList";
@@ -9,7 +13,7 @@ interface Quotas {
   humorapi: number | null;
 }
 
-export default function App() {
+function MainView() {
   const [logsOpen, setLogsOpen] = useState(false);
   const [quotas, setQuotas] = useState<Quotas>({ artsearch: null, humorapi: null });
 
@@ -30,23 +34,52 @@ export default function App() {
   useEffect(() => { fetchQuotasRef.current(); }, []);
 
   return (
-    <div className="h-screen overflow-y-auto">
-      <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col min-h-screen">
-        <ArtSearch quota={quotas.artsearch} onQuotaUsed={fetchQuotas} />
-        <MemeSearch quota={quotas.humorapi} onQuotaUsed={fetchQuotas} />
-        <div className="flex-1 flex flex-col min-h-[400px]">
-          <WishList />
-        </div>
-        <div className="mt-4 shrink-0">
-          <button
-            onClick={() => setLogsOpen(true)}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
-          >
-            Logs
-          </button>
+    <>
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-2xl mx-auto px-4 py-6 flex flex-col min-h-full">
+          <ArtSearch quota={quotas.artsearch} onQuotaUsed={fetchQuotas} />
+          <MemeSearch quota={quotas.humorapi} onQuotaUsed={fetchQuotas} />
+          <div className="flex-1 flex flex-col min-h-[400px]">
+            <WishList />
+          </div>
+          <div className="mt-4 shrink-0">
+            <button
+              onClick={() => setLogsOpen(true)}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+            >
+              Logs
+            </button>
+          </div>
         </div>
       </div>
       <LogPanel open={logsOpen} onClose={() => setLogsOpen(false)} />
+    </>
+  );
+}
+
+export default function App() {
+  const { user, loading } = useAuth();
+  const [adminView, setAdminView] = useState(false);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#0a1628]">
+        <p className="text-slate-400 text-sm">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage />;
+  }
+
+  return (
+    <div className="h-screen flex flex-col bg-[#0a1628]">
+      <NavBar
+        onAdminClick={() => setAdminView((v) => !v)}
+        isAdminView={adminView}
+      />
+      {adminView && user.role === "ADMIN" ? <AdminPanel /> : <MainView />}
     </div>
   );
 }
