@@ -22,7 +22,7 @@ export default function WishList() {
         page: String(page), limit: "5",
         ...(search ? { search } : {}),
       });
-      const res = await fetch(`/wishes?${params}`);
+      const res = await fetch(`/api/wishes?${params}`);
       const json: PaginatedWishes = await res.json();
       setWishes(json.data);
       setTotal(json.total);
@@ -35,7 +35,7 @@ export default function WishList() {
   useEffect(() => { fetchWishes(); }, [fetchWishes]);
 
   const handleDelete = async (id: string) => {
-    await fetch(`/wishes/${id}`, { method: "DELETE" });
+    await fetch(`/api/wishes/${id}`, { method: "DELETE" });
     fetchWishes();
   };
 

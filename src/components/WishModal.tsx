@@ -33,7 +33,7 @@ export default function WishModal({ wish, onClose, onSave }: Props) {
     setSaving(true);
     setError("");
     try {
-      const url = wish ? `/wishes/${wish.id}` : `/wishes`;
+      const url = wish ? `/api/wishes/${wish.id}` : `/api/wishes`;
       const res = await fetch(url, {
         method: wish ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },

@@ -15,7 +15,7 @@ export default function App() {
 
   const fetchQuotas = useCallback(async () => {
     try {
-      const res = await fetch("/quotas");
+      const res = await fetch("/api/quotas");
       if (!res.ok) return;
       const data = await res.json();
       setQuotas({ artsearch: data.artsearch ?? null, humorapi: data.humorapi ?? null });

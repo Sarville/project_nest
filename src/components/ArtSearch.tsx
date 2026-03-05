@@ -51,7 +51,7 @@ export default function ArtSearch({ quota, onQuotaUsed }: Props) {
 
   const fetchArtworks = async (q: string, off: number): Promise<SearchResult> => {
     const params = new URLSearchParams({ query: q, number: String(PAGE_SIZE), offset: String(off) });
-    const res = await fetchWithError(`/artsearch/artworks?${params}`);
+    const res = await fetchWithError(`/api/artsearch/artworks?${params}`);
     return res.json();
   };
 
@@ -96,7 +96,7 @@ export default function ArtSearch({ quota, onQuotaUsed }: Props) {
     setDetail(null);
     setDetailError("");
     try {
-      const res = await fetchWithError(`/artsearch/artworks/${id}`);
+      const res = await fetchWithError(`/api/artsearch/artworks/${id}`);
       setDetail(await res.json());
     } catch (err) {
       setDetailError(err instanceof Error ? err.message : "Request failed.");
@@ -111,7 +111,7 @@ export default function ArtSearch({ quota, onQuotaUsed }: Props) {
     setDetailError("");
     setDetailLoading(true);
     try {
-      const res = await fetchWithError(`/artsearch/artworks/random`);
+      const res = await fetchWithError(`/api/artsearch/artworks/random`);
       setDetail(await res.json());
     } catch (err) {
       setDetailError(err instanceof Error ? err.message : "Request failed.");

@@ -44,7 +44,7 @@ export default function MemeSearch({ quota, onQuotaUsed }: Props) {
 
   const fetchMemes = async (q: string, off: number): Promise<SearchResult> => {
     const params = new URLSearchParams({ keywords: q, number: String(PAGE_SIZE), offset: String(off) });
-    const res = await fetchWithError(`/humorapi/memes/search?${params}`);
+    const res = await fetchWithError(`/api/humorapi/memes/search?${params}`);
     return res.json();
   };
 
@@ -89,7 +89,7 @@ export default function MemeSearch({ quota, onQuotaUsed }: Props) {
     setRandomMeme(null);
     setRandomError("");
     try {
-      const res = await fetchWithError(`/humorapi/memes/random`);
+      const res = await fetchWithError(`/api/humorapi/memes/random`);
       setRandomMeme(await res.json());
     } catch (err) {
       setRandomError(err instanceof Error ? err.message : "Request failed.");

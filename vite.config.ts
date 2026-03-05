@@ -8,12 +8,10 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     proxy: {
-      '/wishes': 'http://localhost:3001',
-      '/wish-logs': 'http://localhost:3001',
-      '/request-logs': 'http://localhost:3001',
-      '/artsearch': 'http://localhost:3001',
-      '/humorapi': 'http://localhost:3001',
-      '/quotas': 'http://localhost:3001',
+      '/api': {
+        target: 'http://localhost:3001',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
   },
 })

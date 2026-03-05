@@ -45,7 +45,7 @@ export default function LogPanel({ open, onClose }: Props) {
         ...(search ? { search } : {}),
         ...(method ? { method } : {}),
       });
-      const res = await fetch(`/request-logs?${params}`);
+      const res = await fetch(`/api/request-logs?${params}`);
       const json: PaginatedRequestLogs = await res.json();
       setLogs(json.data);
       setTotal(json.total);

@@ -1,19 +1,13 @@
 #!/bin/bash
 set -e
 
-APP_DIR="/var/www/wish-list-app"
+APP_DIR="/var/www/petproject-frontend"
 cd "$APP_DIR"
 
-echo "[$(date)] === Deploy started ==="
+echo "[$(date)] === Frontend deploy started ==="
 
 git pull origin master
-npm install
-npx prisma migrate deploy
-npx prisma generate
-npm run build
+docker compose -f docker-compose.prod.yml up -d --build
 
-pm2 restart wish-list-app 2>/dev/null || pm2 start npm --name "wish-list-app" -- start
-pm2 save
-
-echo "[$(date)] === Deploy complete ==="
-pm2 status
+echo "[$(date)] === Frontend deploy complete ==="
+docker ps --filter "name=petproject_frontend"
