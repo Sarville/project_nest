@@ -1,12 +1,13 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useAuth } from "./context/AuthContext";
-import AuthPage from "./components/AuthPage";
-import NavBar from "./components/NavBar";
-import AdminPanel from "./components/AdminPanel";
-import ArtSearch from "./components/ArtSearch";
-import MemeSearch from "./components/MemeSearch";
-import WishList from "./components/WishList";
-import LogPanel from "./components/LogPanel";
+'use client';
+
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import NavBar from '@/components/NavBar';
+import AdminPanel from '@/components/AdminPanel';
+import ArtSearch from '@/components/ArtSearch';
+import MemeSearch from '@/components/MemeSearch';
+import WishList from '@/components/WishList';
+import LogPanel from '@/components/LogPanel';
 
 interface Quotas {
   artsearch: number | null;
@@ -19,7 +20,7 @@ function MainView() {
 
   const fetchQuotas = useCallback(async () => {
     try {
-      const res = await fetch("/api/quotas");
+      const res = await fetch('/api/quotas');
       if (!res.ok) return;
       const data = await res.json();
       setQuotas({ artsearch: data.artsearch ?? null, humorapi: data.humorapi ?? null });
@@ -57,29 +58,27 @@ function MainView() {
   );
 }
 
-export default function App() {
+export default function HomePage() {
   const { user, loading } = useAuth();
   const [adminView, setAdminView] = useState(false);
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-[#0a1628]">
+      <div className="h-screen flex items-center justify-center">
         <p className="text-slate-400 text-sm">Loading...</p>
       </div>
     );
   }
 
-  if (!user) {
-    return <AuthPage />;
-  }
+  if (!user) return null;
 
   return (
-    <div className="h-screen flex flex-col bg-[#0a1628]">
+    <div className="h-screen flex flex-col">
       <NavBar
         onAdminClick={() => setAdminView((v) => !v)}
         isAdminView={adminView}
       />
-      {adminView && user.role === "ADMIN" ? <AdminPanel /> : <MainView />}
+      {adminView && user.role === 'ADMIN' ? <AdminPanel /> : <MainView />}
     </div>
   );
 }

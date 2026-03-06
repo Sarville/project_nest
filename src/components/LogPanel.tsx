@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import type { RequestLog, PaginatedRequestLogs } from "../types/wish";

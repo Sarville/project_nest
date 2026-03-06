@@ -1,3 +1,5 @@
+'use client';
+
 import type { Wish } from "../types/wish";
 
 interface Props {

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useCallback } from "react";
 import type { Wish, PaginatedWishes } from "../types/wish";
 import WishCard from "./WishCard";

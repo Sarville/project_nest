@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useRef, type FormEvent } from "react";
 import type { Wish } from "../types/wish";
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, type FormEvent } from "react";
 
 const PAGE_SIZE = 10;

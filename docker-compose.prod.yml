@@ -7,3 +7,6 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:3002:3002"
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
