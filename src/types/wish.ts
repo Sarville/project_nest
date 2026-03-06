@@ -39,6 +39,8 @@ export interface RequestLog {
   method: string;
   url: string;
   body: string | null;
+  userId: string | null;
+  user?: { email: string } | null;
   createdAt: string;
 }
 

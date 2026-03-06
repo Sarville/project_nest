@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../context/AuthContext";
 import type { RequestLog, PaginatedRequestLogs } from "../types/wish";
 
 interface Props {
@@ -28,6 +29,8 @@ function formatDate(iso: string): string {
 }
 
 export default function LogPanel({ open, onClose }: Props) {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
   const [logs, setLogs] = useState<RequestLog[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -46,6 +49,7 @@ export default function LogPanel({ open, onClose }: Props) {
         ...(method ? { method } : {}),
       });
       const res = await fetch(`/api/request-logs?${params}`);
+      if (!res.ok) return;
       const json: PaginatedRequestLogs = await res.json();
       setLogs(json.data);
       setTotal(json.total);
@@ -109,7 +113,7 @@ export default function LogPanel({ open, onClose }: Props) {
           ) : logs.length === 0 ? (
             <p className="text-slate-500 text-sm text-center py-10">No records found.</p>
           ) : (
-            logs.map((log) => <LogEntry key={log.id} log={log} />)
+            logs.map((log) => <LogEntry key={log.id} log={log} showUser={isAdmin} />)
           )}
         </div>
 
@@ -132,7 +136,7 @@ export default function LogPanel({ open, onClose }: Props) {
   );
 }
 
-function LogEntry({ log }: { log: RequestLog }) {
+function LogEntry({ log, showUser }: { log: RequestLog; showUser: boolean }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className="bg-[#1e3a5f] rounded-xl p-3 border border-slate-700/50">
@@ -142,6 +146,11 @@ function LogEntry({ log }: { log: RequestLog }) {
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0 ${methodColor(log.method)}`}>
               {log.method}
             </span>
+            {showUser && (
+              <span className="text-xs text-slate-400 truncate">
+                {log.user?.email ?? "anonymous"}
+              </span>
+            )}
             {log.body && (
               <button onClick={() => setExpanded(e => !e)}
                 className="text-slate-500 hover:text-slate-300 text-xs transition-colors shrink-0">
