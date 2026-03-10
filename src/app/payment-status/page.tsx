@@ -109,7 +109,7 @@ function PaymentStatusContent() {
 
         <div className="flex flex-col gap-2">
           <button
-            onClick={() => router.push('/?dashboard=1')}
+            onClick={() => router.push('/?menu=account')}
             className="w-full py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors"
           >
             Back to Account
@@ -117,7 +117,7 @@ function PaymentStatusContent() {
 
           {status === 'failed' && (
             <button
-              onClick={() => router.push('/?dashboard=1')}
+              onClick={() => router.push('/?menu=account')}
               className="w-full py-2.5 text-sm font-semibold border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white rounded-lg transition-colors"
             >
               Try again

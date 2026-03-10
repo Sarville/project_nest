@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import NavBar from '@/components/NavBar';
 import AdminPanel from '@/components/AdminPanel';
@@ -57,24 +57,24 @@ function MainView() {
   );
 }
 
-export default function HomePage() {
+function HomePageInner() {
   const { user, loading } = useAuth();
-  const [adminView, setAdminView] = useState(false);
-  const [dashboardView, setDashboardView] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const menu = searchParams.get('menu');
+  const dashboardView = menu === 'account';
+  const adminView = menu === 'admin';
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace('/login');
+      return;
     }
-  }, [loading, user, router]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('dashboard') === '1') setDashboardView(true);
+    if (!loading && user && menu === 'admin' && user.role !== 'ADMIN') {
+      router.replace('/');
     }
-  }, []);
+  }, [loading, user, menu, router]);
 
   if (loading) {
     return (
@@ -87,13 +87,11 @@ export default function HomePage() {
   if (!user) return null;
 
   const handleAdminClick = () => {
-    setAdminView((v) => !v);
-    setDashboardView(false);
+    router.push(adminView ? '/' : '/?menu=admin');
   };
 
   const handleDashboardClick = () => {
-    setDashboardView((v) => !v);
-    setAdminView(false);
+    router.push(dashboardView ? '/' : '/?menu=account');
   };
 
   let content: React.ReactNode;
@@ -115,5 +113,17 @@ export default function HomePage() {
       />
       {content}
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-slate-400 text-sm">Loading...</p>
+      </div>
+    }>
+      <HomePageInner />
+    </Suspense>
   );
 }
