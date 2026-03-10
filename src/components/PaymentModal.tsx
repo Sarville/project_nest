@@ -302,7 +302,10 @@ export default function PaymentModal({ open, onClose, onSuccess, hasSavedCard = 
   }, []);
 
   useEffect(() => {
-    if (open) initialize();
+    if (open) {
+      getStripe(); // start loading Stripe.js immediately, in parallel with API calls
+      initialize();
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
